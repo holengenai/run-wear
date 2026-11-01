@@ -602,12 +602,15 @@ function renderAll(){
   const why=badReason(w);
   $('#bubble').innerHTML=`${s<50&&why?`<span class="warn">不太适合跑步 · ${why}</span><br>`:''}${esc(d.line)}<small>跑起来的感觉像 ${Math.round(d.rt)}°</small>`;
   $('#mascot').innerHTML=mascot(d.look);
-  const bt=bestTime(), be=$('#best');
-  if(bt){ be.hidden=false;
-    if(bt.idx===k){ be.className='best ok'; be.innerHTML=`这就是${bt.label.startsWith('今天')?'今天':'明天'}最适合跑的时间 ✓`; be.onclick=null; }
-    else { be.className='best'; be.innerHTML=`<span><b>${bt.label}</b>更适合跑：${bt.why}</span><span class="go">看看 ›</span>`;
-      be.onclick=()=>{ state.hourIdx=bt.idx; renderAll(); }; }
-  } else be.hidden=true;
+  // 只在现在不适合跑、而且之后有明显更好的时间时才提示
+  const bt=bestTime(), be=$('#best'); be.hidden=true; be.onclick=null;
+  if(bt && s<50 && why && bt.idx!==k && score(bt.idx)>=70){
+    const bw=hourData(bt.idx), wasRain=w.pr>=1||w.pp>=70||(w.code>=51&&w.code<=99);
+    const hint= wasRain&&!(bw.code>=51&&bw.code<=99)&&bw.pp<50 ? '雨停' : (w.at>=28||w.dp>=22) ? '会凉快一些' : w.ws>=9 ? '风会小一些' : w.at<=-5 ? '会暖和一些' : '天气会好一些';
+    be.hidden=false; be.className='best';
+    be.innerHTML=`<span><b>${bt.label}</b>${hint}，那时再跑</span><span class="go">看看 ›</span>`;
+    be.onclick=()=>{ state.hourIdx=bt.idx; renderAll(); };
+  }
   $('#wearTitle').textContent=(k===state.nowIdx?'现在':when)+'这样穿';
   $('#body').innerHTML=bodyFigure(d);
   const ex=$('#extras'); ex.hidden=!d.extras.length;
