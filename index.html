@@ -12,7 +12,7 @@
   /* 参考 Ahead / Duolingo：角色当主角、饱和主色、厚实 3D 按钮、粉彩卡片、打卡连胜 */
   --brand:#f2884f; --brand-dk:#d9692e; --brand-soft:#fff4ed; --brand-2:#f9b98f; --brand-3:#fde3d2;
   --ink:#2a2733;
-  --muted:#8b8794;
+  --muted:#6f6a78; --brand-text:#a94b1c; --danger-text:#b5452f;
   --line:#eeebe8;
   --bg:#ffffff;
   --fill:#f7f5f3;
@@ -37,8 +37,8 @@ button:focus-visible,input:focus-visible{outline:3px solid #b9a8ff;outline-offse
 .pill{display:flex;align-items:center;gap:6px;box-shadow:0 2px 6px -3px rgba(43,35,64,.15);border:1.5px solid var(--line);background:#fff;border-radius:999px;padding:6px 12px;font-weight:700;font-size:15px;min-width:0}
 .pill span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:170px}
 .chunky:active{transform:scale(.98)}
-.streak{margin-left:auto;font-weight:700;color:var(--brand);font-size:14px}
-.streak.off{color:#c3bfd0}
+.streak{margin-left:auto;font-weight:700;color:var(--brand-text);font-size:14px}
+.streak.off{color:#a8a3b0}
 .round{width:40px;height:40px;padding:0;justify-content:center}
 
 /* 时间 */
@@ -57,14 +57,14 @@ button:focus-visible,input:focus-visible{outline:3px solid #b9a8ff;outline-offse
 .bubble{position:relative;margin:0;background:#fff;color:var(--ink);border-radius:20px;padding:13px 16px;font-size:17px;font-weight:600;line-height:1.45;box-shadow:0 6px 16px -10px rgba(43,35,64,.25);text-wrap:balance}
 .bubble::after{content:"";position:absolute;left:-9px;top:50%;margin-top:-9px;border:9px solid transparent;border-right-color:#fff;border-left:0}
 .bubble small{display:block;font-size:13px;font-weight:700;color:var(--muted);margin-top:4px}
-.bubble .warn{display:inline-block;margin-bottom:6px;background:#fbe9e5;color:var(--bad);font-size:12px;font-weight:700;border-radius:8px;padding:2px 8px}
+.bubble .warn{display:inline-block;margin-bottom:6px;background:#fbe9e5;color:var(--danger-text);font-size:12px;font-weight:700;border-radius:8px;padding:2px 8px}
 .mascot{display:block;width:210px;height:190px;margin:4px auto 0}
 .hero2{display:grid;grid-template-columns:92px 1fr;gap:12px;align-items:center;margin-top:12px}
 .hero2 .mascot{width:92px;height:84px;margin:0}
 .stage{padding-bottom:16px}
 .best{display:flex;align-items:center;justify-content:space-between;gap:8px;width:100%;margin-top:12px;border:0;border-radius:16px;background:rgba(255,255,255,.94);padding:10px 14px;font-size:14px;font-weight:700;text-align:left;color:var(--ink)}
-.best b{color:var(--brand-dk)}
-.best .go{flex:0 0 auto;color:var(--brand-dk);font-weight:700}
+.best b{color:var(--brand-text)}
+.best .go{flex:0 0 auto;color:var(--brand-text);font-weight:700}
 .best.ok{background:rgba(255,255,255,.55);cursor:default}
 .stage.dark .best{background:rgba(255,255,255,.14);color:#fff}
 .stage.dark .best b,.stage.dark .best .go{color:#ffd0b0}
@@ -90,7 +90,7 @@ button:focus-visible,input:focus-visible{outline:3px solid #b9a8ff;outline-offse
 .tips{background:var(--fill);border-radius:20px;padding:14px 16px}
 .tips h3{margin:0 0 4px;font-size:13px;font-weight:700;color:var(--muted)}
 .tips ul{margin:0;padding-left:18px;display:flex;flex-direction:column;gap:3px;font-size:14px}
-.tips li.warn{color:var(--bad);font-weight:700}
+.tips li.warn{color:var(--danger-text);font-weight:600}
 
 .rows{display:flex;flex-direction:column;gap:10px}
 .row{display:flex;justify-content:space-between;align-items:center;border:1.5px solid var(--line);background:#fff;border-radius:16px;padding:12px 14px;font-weight:700;width:100%;text-align:left}
@@ -117,7 +117,7 @@ button:focus-visible,input:focus-visible{outline:3px solid #b9a8ff;outline-offse
 /* 底部大按钮 */
 .cta{position:fixed;left:50%;transform:translateX(-50%);bottom:0;width:100%;max-width:440px;padding:12px 16px 18px;background:linear-gradient(rgba(255,255,255,0),#fff 35%)}
 @media (min-width:600px){.cta{position:sticky;transform:none;left:auto;bottom:0;margin:0 -16px -120px;width:auto;border-radius:0 0 36px 36px}}
-.big{width:100%;border:0;border-radius:999px;padding:15px;font-size:16px;font-weight:700;letter-spacing:.5px;background:var(--brand);color:#fff;box-shadow:0 10px 24px -12px rgba(217,105,46,.7)}
+.big{width:100%;border:0;border-radius:999px;padding:15px;font-size:16px;font-weight:700;letter-spacing:.5px;background:var(--brand);color:var(--ink);box-shadow:0 10px 24px -12px rgba(217,105,46,.7)}
 .big:active{transform:scale(.98)}
 .big.done{background:var(--fill);color:var(--muted);box-shadow:none}
 .big.ghost{background:var(--fill);color:var(--ink);box-shadow:none}
@@ -149,7 +149,7 @@ button:focus-visible,input:focus-visible{outline:3px solid #b9a8ff;outline-offse
 .week div{display:flex;flex-direction:column;align-items:center;gap:4px;font-size:12px;font-weight:700;color:var(--muted)}
 .week i{width:28px;height:28px;border-radius:50%;background:var(--fill);display:grid;place-items:center}
 .week i.on{background:var(--brand)}
-.streakBig{font-size:14px;font-weight:700;color:var(--brand);background:var(--brand-soft);display:inline-block;border-radius:999px;padding:3px 12px}
+.streakBig{font-size:14px;font-weight:700;color:var(--brand-text);background:var(--brand-soft);display:inline-block;border-radius:999px;padding:3px 12px}
 .mt{margin-top:10px}
 @media (prefers-reduced-motion:no-preference){
   .mascot .bob{animation:bob 1.6s ease-in-out infinite}
