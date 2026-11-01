@@ -57,6 +57,7 @@ button:focus-visible,input:focus-visible{outline:3px solid #b9a8ff;outline-offse
 .bubble{position:relative;margin:0;background:#fff;color:var(--ink);border-radius:20px;padding:13px 16px;font-size:17px;font-weight:600;line-height:1.45;box-shadow:0 6px 16px -10px rgba(43,35,64,.25);text-wrap:balance}
 .bubble::after{content:"";position:absolute;left:50%;bottom:-9px;margin-left:-9px;border:9px solid transparent;border-top-color:#fff;border-bottom:0}
 .bubble small{display:block;font-size:13px;font-weight:700;color:var(--muted);margin-top:4px}
+.bubble .soft{display:inline-block;margin-bottom:6px;background:var(--brand-soft);color:var(--brand-text);font-size:12px;font-weight:700;border-radius:8px;padding:2px 8px}
 .bubble .warn{display:inline-block;margin-bottom:6px;background:#fbe9e5;color:var(--danger-text);font-size:12px;font-weight:700;border-radius:8px;padding:2px 8px}
 .mascot{display:block;width:210px;height:190px;margin:4px auto 0}
 .hero2{display:grid;grid-template-columns:92px 1fr;gap:12px;align-items:center;margin-top:12px}
@@ -184,7 +185,7 @@ button:focus-visible,input:focus-visible{outline:3px solid #b9a8ff;outline-offse
       <span id="placeName">正在定位…</span></button>
     <div class="pill streak off" id="streak" title="连续打卡天数">
       <svg width="18" height="18" viewBox="0 0 24 24"><g fill="currentColor"><ellipse cx="8.5" cy="9" rx="3" ry="4.6" transform="rotate(-12 8.5 9)"/><circle cx="7.6" cy="15.6" r="1.9"/><ellipse cx="15.5" cy="11" rx="3" ry="4.6" transform="rotate(12 15.5 11)"/><circle cx="16.4" cy="17.6" r="1.9"/></g></svg>
-      <span><span id="streakN">0</span> 天</span></div>
+      <span id="streakLabel">第一次跑？</span></div>
     <button class="pill round chunky" id="setBtn" aria-label="我的设置">
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M4 7h10M18 7h2M4 17h4M12 17h8"/><circle cx="16" cy="7" r="2"/><circle cx="10" cy="17" r="2"/></svg></button>
   </div>
@@ -244,7 +245,8 @@ function streak(){
     if(set.has(k)){ n++; d.setDate(d.getDate()-1); } else break; }
   return n;
 }
-function renderStreak(){ const n=streak(); $('#streakN').textContent=n; $('#streak').classList.toggle('off',n===0);
+function renderStreak(){ const n=streak(), all=runs().length;
+  $('#streakLabel').textContent=n?`${n} 天`:all?'再出发':'第一次跑？'; $('#streak').classList.remove('off');
   const done=runs().includes(todayStr()); const b=$('#ctaBtn');
   b.textContent=done?'今天已打卡 ✓ 再跑一次也可以':'跑完了，打个卡'; b.classList.toggle('done',done); }
 
@@ -448,10 +450,17 @@ function celebrate(d){
   const days=['一','二','三','四','五','六','日'].map((l,i)=>{ const x=new Date(mon); x.setDate(mon.getDate()+i);
     const k=x.getFullYear()+'-'+String(x.getMonth()+1).padStart(2,'0')+'-'+String(x.getDate()).padStart(2,'0');
     return `<div><i class="${set.has(k)?'on':''}">${set.has(k)?'<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5 9-10"/></svg>':''}</i>${l}</div>`; }).join('');
+  const all=runs().length;
+  const [hi,sub]= all===1?['第一次跑步，完成！','你已经比昨天的自己多跑了一次']
+    : n===3?['连续 3 天！','习惯开始了']
+    : n===7?['连续一周！','团子都想跟你一起跑了']
+    : n>1?['跑得不错！',`连着跑了 ${n} 天`]
+    : all%10===0?[`第 ${all} 次出门跑步`,'一次一次，都算数']
+    : ['又跑了一次！','出门就是最难的那一步'];
   openModal(`<div class="center pop">
       <img src="${IMG('03')}" alt="" style="width:120px;height:auto;display:block;margin:0 auto">
-      <h3 id="modalTitle" style="margin:4px 0 8px">跑得不错！</h3>
-      <div class="streakBig">连续第 ${n} 天</div>
+      <h3 id="modalTitle" style="margin:4px 0 2px">${hi}</h3>
+      <p class="note" style="margin:0 0 10px">${sub}</p>
       <div class="week">${days}</div>
       <p class="note">${d<0?'记住了，下次让你穿暖一点。':d>0?'记住了，下次让你穿少一点。':'穿得刚好，继续保持这个标准。'}</p>
       <button class="big mt" id="okBtn">好的</button></div>`);
@@ -543,14 +552,14 @@ function score(k){ const w=hourData(k); let s=100;
   if([95,96,99].includes(w.code)) s-=50; return Math.max(0,Math.min(100,s)); }
 const scoreColor=s=>s>=75?'var(--good)':s>=50?'var(--ok)':'var(--bad)';
 const TIERS=[ /* [新手衣柜里就有的, 图标, 有的话更好] */
- {min:30,line:'天很热，能少穿就少穿',top:['背心或短袖','singlet','速干背心'],bottom:['运动短裤','shorts','跑步短裤'],head:'有帽檐的帽子'},
- {min:24,line:'跑起来会热，按夏天穿',top:['短袖 T 恤','tee','速干 T 恤'],bottom:['运动短裤','shorts','跑步短裤'],head:'有帽檐的帽子'},
- {min:21,line:'不冷不热，短袖短裤最舒服',top:['短袖 T 恤','tee','速干 T 恤'],bottom:['运动短裤','shorts','跑步短裤']},
- {min:15,line:'刚出门会觉得有点凉，跑 10 分钟就暖和了',top:['薄长袖 T 恤','long','速干长袖'],bottom:['运动短裤','shorts','跑步短裤']},
+ {min:30,line:'天很热，少穿一点，慢慢跑也算数',top:['背心或短袖','singlet','速干背心'],bottom:['运动短裤','shorts','跑步短裤'],head:'有帽檐的帽子'},
+ {min:24,line:'跑起来会热，按夏天穿，出门吧',top:['短袖 T 恤','tee','速干 T 恤'],bottom:['运动短裤','shorts','跑步短裤'],head:'有帽檐的帽子'},
+ {min:21,line:'不冷不热，正是跑步的好天',top:['短袖 T 恤','tee','速干 T 恤'],bottom:['运动短裤','shorts','跑步短裤']},
+ {min:15,line:'刚出门有点凉，跑 10 分钟就暖和了',top:['薄长袖 T 恤','long','速干长袖'],bottom:['运动短裤','shorts','跑步短裤']},
  {min:10,line:'刚出门会冷，跑起来就不冷了',top:['长袖 T 恤','long','速干长袖'],bottom:['运动长裤或短裤','shorts','跑步短裤'],hands:['薄手套（可选）','跑步手套']},
- {min:5,line:'冷，记得护住手和耳朵',top:['长袖 T 恤','long','速干长袖'],outer:['薄外套','vest','防风马甲'],bottom:['运动长裤','tights','跑步紧身裤'],head:'能盖住耳朵的帽子',headIcon:'beanie',hands:['薄手套','跑步手套']},
- {min:-1,line:'很冷，要穿两层',top:['保暖内衣 + 长袖','long','速干保暖打底'],outer:['厚一点的外套','jacket','防风跑步外套'],bottom:['加绒运动裤','tights','加绒紧身裤'],head:'毛线帽',headIcon:'beanie',hands:['手套','跑步手套']},
- {min:-99,line:'非常冷，穿厚一点再出门',top:['保暖内衣 + 卫衣','long','抓绒中层'],outer:['防风外套','jacket','防风跑步外套'],bottom:['加绒运动裤','tights','加绒紧身裤'],head:'毛线帽 + 围脖',headIcon:'beanie',hands:['厚手套','跑步手套']}
+ {min:5,line:'冷，护住手和耳朵，跑起来就暖了',top:['长袖 T 恤','long','速干长袖'],outer:['薄外套','vest','防风马甲'],bottom:['运动长裤','tights','跑步紧身裤'],head:'能盖住耳朵的帽子',headIcon:'beanie',hands:['薄手套','跑步手套']},
+ {min:-1,line:'很冷，穿两层，跑 10 分钟就暖了',top:['保暖内衣 + 长袖','long','速干保暖打底'],outer:['厚一点的外套','jacket','防风跑步外套'],bottom:['加绒运动裤','tights','加绒紧身裤'],head:'毛线帽',headIcon:'beanie',hands:['手套','跑步手套']},
+ {min:-99,line:'非常冷，穿厚一点，跑短一点也很棒',top:['保暖内衣 + 卫衣','long','抓绒中层'],outer:['防风外套','jacket','防风跑步外套'],bottom:['加绒运动裤','tights','加绒紧身裤'],head:'毛线帽 + 围脖',headIcon:'beanie',hands:['厚手套','跑步手套']}
 ];
 function decide(w){
   const rt=w.at+boost(), T=TIERS.find(t=>rt>=t.min);
@@ -575,10 +584,10 @@ function decide(w){
     umbrella:rainy&&!snowy, glasses:false, lamp:false};
   return {rt,rainy,snowy,windy,line:T.line,items,extras,better:[...new Set(better)],look,tier:T.min,capOn:headIcon==='cap'&&!!head,hasOuter:!!outer,beanie:headIcon==='beanie'};
 }
-function badReason(w){
-  if([95,96,99].includes(w.code)) return '有雷暴'; if(w.at>=28||w.dp>=22) return '太闷热';
-  if(w.pr>=1||w.pp>=70) return '雨比较大'; if(w.ws>=9) return '风太大'; if(w.at<=-5) return '太冷';
-  if(w.day&&w.uv>=8) return '太阳太晒'; return '';
+function badReason(w){ /* 只有真的不该出门才拦：雷暴、暴雨、极端冷热、大风 */
+  if([95,96,99].includes(w.code)) return '有雷暴'; if(w.pr>=4||[65,67,82].includes(w.code)) return '雨太大';
+  if(w.at>=32||w.dp>=24) return '太闷热'; if(w.ws>=12) return '风太大'; if(w.at<=-12) return '太冷';
+  return '';
 }
 function tipsFor(w,d){ const t=[];
   if([95,96,99].includes(w.code)) t.push(['warn','有雷暴，别在户外跑，换个时间再去。']);
@@ -633,10 +642,11 @@ function renderAll(){
   $('#meta').innerHTML=`<span>${when}</span><span><b>${Math.round(w.t)}°</b> ${WMO[w.code]||''}</span>`+cond.map(c=>`<span>${c}</span>`).join('')+'<button class="det" id="detBtn">详情 ›</button>';
   $('#detBtn').onclick=openDetails;
   const why=badReason(w);
-  $('#bubble').innerHTML=`${s<50&&why?`<span class="warn">不太适合跑步 · ${why}</span><br>`:''}${esc(d.line)}<small>跑起来的感觉像 ${Math.round(d.rt)}°</small>`;
+  const soft=!why&&d.rainy?(d.snowy?'下雪了，慢点跑，小心路滑':'下雨也能跑，戴顶帽子就好'):'';
+  $('#bubble').innerHTML=`${why?`<span class="warn">今天先别跑 · ${why}</span><br>`:soft?`<span class="soft">${soft}</span><br>`:''}${esc(d.line)}<small>跑起来的感觉像 ${Math.round(d.rt)}°</small>`;
   // 只在现在不适合跑、而且之后有明显更好的时间时才提示
   const bt=bestTime(), be=$('#best'); be.hidden=true; be.onclick=null;
-  if(bt && s<50 && why && bt.idx!==k && score(bt.idx)>=70){
+  if(bt && why && bt.idx!==k && score(bt.idx)>=70){
     const bw=hourData(bt.idx), wasRain=w.pr>=1||w.pp>=70||(w.code>=51&&w.code<=99);
     const hint= wasRain&&!(bw.code>=51&&bw.code<=99)&&bw.pp<50 ? '雨停' : (w.at>=28||w.dp>=22) ? '会凉快一些' : w.ws>=9 ? '风会小一些' : w.at<=-5 ? '会暖和一些' : '天气会好一些';
     be.hidden=false; be.className='best';
