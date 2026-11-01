@@ -10,13 +10,13 @@
 <style>
 :root{
   /* 参考 Ahead / Duolingo：角色当主角、饱和主色、厚实 3D 按钮、粉彩卡片、打卡连胜 */
-  --brand:#ff7a2f; --brand-dk:#e0580f; --brand-soft:#fff0e6;
-  --ink:#2b2340;
-  --muted:#7c7690;
-  --line:#ebe8f2;
+  --brand:#f2884f; --brand-dk:#d9692e; --brand-soft:#fff4ed; --brand-2:#f9b98f; --brand-3:#fde3d2;
+  --ink:#2a2733;
+  --muted:#8b8794;
+  --line:#eeebe8;
   --bg:#ffffff;
-  --fill:#f6f4fb;
-  --good:#3cc47c; --ok:#f5b62a; --bad:#ff5b5b;
+  --fill:#f7f5f3;
+  --good:#6fae8c; --ok:#e2b25a; --bad:#d9634f;
   --font-latin:"Nunito",system-ui,sans-serif;
   --font:"Nunito","Noto Sans SC","PingFang SC","Hiragino Sans GB","Microsoft YaHei",system-ui,sans-serif;
   color-scheme:light;
@@ -34,10 +34,10 @@ button:focus-visible,input:focus-visible{outline:3px solid #b9a8ff;outline-offse
 
 /* 顶栏 */
 .top{display:flex;align-items:center;gap:8px}
-.pill{display:flex;align-items:center;gap:6px;box-shadow:0 2px 6px -3px rgba(43,35,64,.15);border:1.5px solid var(--line);background:#fff;border-radius:999px;padding:6px 12px;font-weight:800;font-size:15px;min-width:0}
+.pill{display:flex;align-items:center;gap:6px;box-shadow:0 2px 6px -3px rgba(43,35,64,.15);border:1.5px solid var(--line);background:#fff;border-radius:999px;padding:6px 12px;font-weight:700;font-size:15px;min-width:0}
 .pill span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:170px}
 .chunky:active{transform:scale(.98)}
-.streak{margin-left:auto;font-weight:800;color:var(--brand);font-size:14px}
+.streak{margin-left:auto;font-weight:700;color:var(--brand);font-size:14px}
 .streak.off{color:#c3bfd0}
 .round{width:40px;height:40px;padding:0;justify-content:center}
 
@@ -53,18 +53,18 @@ button:focus-visible,input:focus-visible{outline:3px solid #b9a8ff;outline-offse
 .stage .meta{display:flex;flex-wrap:wrap;gap:6px}
 .stage .meta span{background:rgba(255,255,255,.92);border-radius:999px;padding:3px 10px;font-size:13px;font-weight:700}
 .stage.dark .meta span{background:rgba(255,255,255,.14)}
-.stage .meta b{font-family:var(--font-latin);font-weight:800}
-.bubble{position:relative;margin:0;background:#fff;color:var(--ink);border-radius:20px;padding:13px 16px;font-size:17px;font-weight:700;line-height:1.4;box-shadow:0 6px 16px -10px rgba(43,35,64,.25);text-wrap:balance}
+.stage .meta b{font-family:var(--font-latin);font-weight:700}
+.bubble{position:relative;margin:0;background:#fff;color:var(--ink);border-radius:20px;padding:13px 16px;font-size:17px;font-weight:600;line-height:1.45;box-shadow:0 6px 16px -10px rgba(43,35,64,.25);text-wrap:balance}
 .bubble::after{content:"";position:absolute;left:-9px;top:50%;margin-top:-9px;border:9px solid transparent;border-right-color:#fff;border-left:0}
 .bubble small{display:block;font-size:13px;font-weight:700;color:var(--muted);margin-top:4px}
-.bubble .warn{display:inline-block;margin-bottom:6px;background:#ffe3e3;color:#d33a3a;font-size:12px;font-weight:800;border-radius:8px;padding:2px 8px}
+.bubble .warn{display:inline-block;margin-bottom:6px;background:#fbe9e5;color:var(--bad);font-size:12px;font-weight:700;border-radius:8px;padding:2px 8px}
 .mascot{display:block;width:210px;height:190px;margin:4px auto 0}
 .hero2{display:grid;grid-template-columns:92px 1fr;gap:12px;align-items:center;margin-top:12px}
 .hero2 .mascot{width:92px;height:84px;margin:0}
 .stage{padding-bottom:16px}
 .best{display:flex;align-items:center;justify-content:space-between;gap:8px;width:100%;margin-top:12px;border:0;border-radius:16px;background:rgba(255,255,255,.94);padding:10px 14px;font-size:14px;font-weight:700;text-align:left;color:var(--ink)}
 .best b{color:var(--brand-dk)}
-.best .go{flex:0 0 auto;color:var(--brand-dk);font-weight:800}
+.best .go{flex:0 0 auto;color:var(--brand-dk);font-weight:700}
 .best.ok{background:rgba(255,255,255,.55);cursor:default}
 .stage.dark .best{background:rgba(255,255,255,.14);color:#fff}
 .stage.dark .best b,.stage.dark .best .go{color:#ffd0b0}
@@ -72,7 +72,7 @@ button:focus-visible,input:focus-visible{outline:3px solid #b9a8ff;outline-offse
 .stage>*:not(.deco){position:relative;z-index:1}
 
 /* 穿搭卡片 */
-.h{font-size:20px;font-weight:800;margin:4px 0 0}
+.h{font-size:19px;font-weight:700;margin:4px 0 0;letter-spacing:.2px}
 .wear{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .card{border:0;background:var(--c1);border-radius:22px;padding:12px 12px 10px;display:flex;flex-direction:column;gap:6px;min-height:118px}
 .card svg{width:44px;height:44px}
@@ -84,16 +84,16 @@ button:focus-visible,input:focus-visible{outline:3px solid #b9a8ff;outline-offse
 .body{background:var(--fill);border-radius:24px;padding:8px 6px 4px}
 .body svg{display:block;width:100%;height:auto}
 .extras{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
-.extras span{display:flex;align-items:center;gap:6px;background:#e8f8ef;color:#1f7a49;border-radius:999px;padding:5px 12px 5px 8px;font-size:14px;font-weight:700}
+.extras span{display:flex;align-items:center;gap:6px;background:var(--fill);color:var(--ink);border-radius:999px;padding:5px 12px 5px 8px;font-size:14px;font-weight:700}
 .extras svg{width:20px;height:20px}
 /* 提醒 */
-.tips{background:#fff8e1;border:2px solid #ffe7a6;border-radius:20px;padding:12px 14px}
-.tips h3{margin:0 0 4px;font-size:14px;font-weight:800;color:#b07a00}
+.tips{background:var(--fill);border-radius:20px;padding:14px 16px}
+.tips h3{margin:0 0 4px;font-size:13px;font-weight:700;color:var(--muted)}
 .tips ul{margin:0;padding-left:18px;display:flex;flex-direction:column;gap:3px;font-size:14px}
-.tips li.warn{color:#d33a3a;font-weight:700}
+.tips li.warn{color:var(--bad);font-weight:700}
 
 .rows{display:flex;flex-direction:column;gap:10px}
-.row{display:flex;justify-content:space-between;align-items:center;border:1.5px solid var(--line);background:#fff;border-radius:16px;padding:12px 14px;font-weight:800;width:100%;text-align:left}
+.row{display:flex;justify-content:space-between;align-items:center;border:1.5px solid var(--line);background:#fff;border-radius:16px;padding:12px 14px;font-weight:700;width:100%;text-align:left}
 .panel{border:1.5px solid var(--line);border-radius:16px;padding:12px;margin-top:-4px}
 .days{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none}
 .days button{flex:0 0 auto;border:1.5px solid var(--line);background:#fff;border-radius:12px;padding:5px 10px;font-size:13px;font-weight:700;color:var(--muted)}
@@ -101,13 +101,13 @@ button:focus-visible,input:focus-visible{outline:3px solid #b9a8ff;outline-offse
 .hours{display:flex;gap:4px;overflow-x:auto;margin-top:10px;scrollbar-width:none}
 .hr{flex:0 0 46px;display:flex;flex-direction:column;align-items:center;gap:4px;border:2px solid transparent;background:transparent;border-radius:12px;padding:6px 0}
 .hr .tt{font-size:11px;color:var(--muted);font-weight:700}
-.hr .v{font-family:var(--font-latin);font-size:17px;font-weight:800}
+.hr .v{font-family:var(--font-latin);font-size:17px;font-weight:700}
 .hr .bar{width:18px;height:6px;border-radius:3px}
 .hr[aria-pressed="true"]{border-color:var(--brand);background:var(--brand-soft)}
 .note{font-size:12px;color:var(--muted);margin-top:8px}
 .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px 8px}
 .grid .k{font-size:12px;color:var(--muted);font-weight:700}
-.grid .n{font-family:var(--font-latin);font-size:20px;font-weight:800}
+.grid .n{font-family:var(--font-latin);font-size:20px;font-weight:700}
 .grid .n small{font-size:12px;color:var(--muted);margin-left:2px}
 .foot{font-size:12px;color:var(--muted);text-align:center;margin:4px 0 0}
 .foot a{color:inherit}
@@ -117,9 +117,9 @@ button:focus-visible,input:focus-visible{outline:3px solid #b9a8ff;outline-offse
 /* 底部大按钮 */
 .cta{position:fixed;left:50%;transform:translateX(-50%);bottom:0;width:100%;max-width:440px;padding:12px 16px 18px;background:linear-gradient(rgba(255,255,255,0),#fff 35%)}
 @media (min-width:600px){.cta{position:sticky;transform:none;left:auto;bottom:0;margin:0 -16px -120px;width:auto;border-radius:0 0 36px 36px}}
-.big{width:100%;border:0;border-radius:999px;padding:15px;font-size:16px;font-weight:800;letter-spacing:.5px;background:var(--brand);color:#fff;box-shadow:0 10px 24px -10px rgba(255,122,47,.8)}
+.big{width:100%;border:0;border-radius:999px;padding:15px;font-size:16px;font-weight:700;letter-spacing:.5px;background:var(--brand);color:#fff;box-shadow:0 10px 24px -12px rgba(217,105,46,.7)}
 .big:active{transform:scale(.98)}
-.big.done{background:#eefaf3;color:#1f9a5a;box-shadow:none}
+.big.done{background:var(--fill);color:var(--muted);box-shadow:none}
 .big.ghost{background:var(--fill);color:var(--ink);box-shadow:none}
 
 /* 弹层 */
@@ -127,28 +127,28 @@ button:focus-visible,input:focus-visible{outline:3px solid #b9a8ff;outline-offse
 .overlay[hidden]{display:none}
 .modal{background:#fff;width:100%;max-width:440px;border-radius:28px 28px 0 0;padding:22px 18px 26px;max-height:92%;overflow:auto}
 @media (min-width:600px){.overlay{align-items:center}.modal{border-radius:28px}}
-.modal h3{font-size:21px;font-weight:800;margin:0 0 14px;text-wrap:balance}
+.modal h3{font-size:21px;font-weight:700;margin:0 0 14px;text-wrap:balance}
 .modal .center{text-align:center}
 .field{margin-bottom:16px}
-.field .lab{font-size:13px;font-weight:800;color:var(--muted);margin-bottom:6px}
+.field .lab{font-size:13px;font-weight:700;color:var(--muted);margin-bottom:6px}
 .opts{display:grid;grid-auto-flow:column;grid-auto-columns:1fr;gap:8px}
-.opts button{border:1.5px solid var(--line);background:#fff;border-radius:14px;padding:9px 4px;font-weight:800;font-size:14px;color:var(--muted)}
+.opts button{border:1.5px solid var(--line);background:#fff;border-radius:14px;padding:9px 4px;font-weight:700;font-size:14px;color:var(--muted)}
 .opts button[aria-pressed="true"]{border-color:var(--brand);color:var(--brand-dk);background:var(--brand-soft)}
 .feel3{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
-.feel3 button{border:1.5px solid var(--line);background:#fff;border-radius:20px;padding:8px 4px 10px;font-weight:800;font-size:15px;display:flex;flex-direction:column;align-items:center}
+.feel3 button{border:1.5px solid var(--line);background:#fff;border-radius:20px;padding:8px 4px 10px;font-weight:700;font-size:15px;display:flex;flex-direction:column;align-items:center}
 .feel3 button:hover{border-color:var(--brand)}
 .feel3 svg{width:84px;height:76px}
 .searchRow{display:flex;gap:8px;margin-top:12px}
 .searchRow input{flex:1;min-width:0;font:inherit;font-weight:700;padding:11px 14px;border-radius:14px;border:1.5px solid var(--line);background:#fff;color:var(--ink)}
-.small{border:1.5px solid var(--line);background:#fff;border-radius:14px;padding:9px 14px;font-weight:800}
+.small{border:1.5px solid var(--line);background:#fff;border-radius:14px;padding:9px 14px;font-weight:700}
 .results{display:flex;flex-direction:column;gap:6px;margin-top:10px}
-.results button{text-align:left;border:1.5px solid var(--line);background:#fff;border-radius:14px;padding:10px 12px;font-weight:800}
+.results button{text-align:left;border:1.5px solid var(--line);background:#fff;border-radius:14px;padding:10px 12px;font-weight:700}
 .results .sub{color:var(--muted);font-size:13px;font-weight:600;margin-left:6px}
 .msg{font-size:13px;color:var(--muted);margin-top:8px;min-height:18px;font-weight:700}
 .week{display:flex;justify-content:center;gap:8px;margin:14px 0 18px}
-.week div{display:flex;flex-direction:column;align-items:center;gap:4px;font-size:12px;font-weight:800;color:var(--muted)}
+.week div{display:flex;flex-direction:column;align-items:center;gap:4px;font-size:12px;font-weight:700;color:var(--muted)}
 .week i{width:28px;height:28px;border-radius:50%;background:var(--fill);display:grid;place-items:center}
-.week i.on{background:var(--good)}
+.week i.on{background:var(--brand)}
 .streakBig{font-size:14px;font-weight:700;color:var(--brand);background:var(--brand-soft);display:inline-block;border-radius:999px;padding:3px 12px}
 .mt{margin-top:10px}
 @media (prefers-reduced-motion:no-preference){
@@ -163,7 +163,7 @@ button:focus-visible,input:focus-visible{outline:3px solid #b9a8ff;outline-offse
 <div class="app">
   <div class="top">
     <button class="pill chunky" id="placeBtn" aria-label="更换地点">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="var(--brand)"><path d="M12 2a7 7 0 0 0-7 7c0 5 7 13 7 13s7-8 7-13a7 7 0 0 0-7-7Zm0 9.5A2.5 2.5 0 1 1 12 6.5a2.5 2.5 0 0 1 0 5Z"/></svg>
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="var(--brand-dk)"><path d="M12 2a7 7 0 0 0-7 7c0 5 7 13 7 13s7-8 7-13a7 7 0 0 0-7-7Zm0 9.5A2.5 2.5 0 1 1 12 6.5a2.5 2.5 0 0 1 0 5Z"/></svg>
       <span id="placeName">正在定位…</span></button>
     <div class="pill streak off" id="streak" title="连续打卡天数">
       <svg width="18" height="18" viewBox="0 0 24 24"><g fill="currentColor"><ellipse cx="8.5" cy="9" rx="3" ry="4.6" transform="rotate(-12 8.5 9)"/><circle cx="7.6" cy="15.6" r="1.9"/><ellipse cx="15.5" cy="11" rx="3" ry="4.6" transform="rotate(12 15.5 11)"/><circle cx="16.4" cy="17.6" r="1.9"/></g></svg>
@@ -250,8 +250,8 @@ function mascot(o){
   // o: {mood:'happy'|'cold'|'hot'|'wet', beanie, scarf, cap, umbrella, glasses, lamp}
   let s='<g class="bob">';
   if(o.umbrella) s+=`<path d="M150 48 V122 q0 9 -9 9" stroke="#3b3355" stroke-width="5" fill="none" stroke-linecap="round"/>
-    <path d="M98 50 C104 10 196 10 202 50 Q189 42 176 50 Q163 42 150 50 Q137 42 124 50 Q111 42 98 50Z" fill="#5ab8ff"/>
-    <path d="M150 14 C140 24 136 38 137 46 Q143 43 150 50 Q157 43 163 46 C164 38 160 24 150 14Z" fill="#9ad6ff"/>`;
+    <path d="M98 50 C104 10 196 10 202 50 Q189 42 176 50 Q163 42 150 50 Q137 42 124 50 Q111 42 98 50Z" fill="#45424f"/>
+    <path d="M150 14 C140 24 136 38 137 46 Q143 43 150 50 Q157 43 163 46 C164 38 160 24 150 14Z" fill="#5d5a66"/>`;
   s+=`<ellipse cx="110" cy="186" rx="52" ry="7" fill="#2b2340" opacity=".1"/>
     <ellipse cx="88" cy="178" rx="15" ry="9" fill="#f49a66"/><ellipse cx="132" cy="178" rx="15" ry="9" fill="#f49a66"/>
     <ellipse cx="44" cy="124" rx="11" ry="14" fill="#f49a66" transform="rotate(-25 44 124)"/>
@@ -263,19 +263,19 @@ function mascot(o){
   const ey=o.cap||o.beanie?106:102;
   s+=`<ellipse cx="90" cy="${ey}" rx="8" ry="9.5" fill="#2b2340"/><ellipse cx="130" cy="${ey}" rx="8" ry="9.5" fill="#2b2340"/>
       <circle cx="87" cy="${ey-4}" r="3" fill="#fff"/><circle cx="127" cy="${ey-4}" r="3" fill="#fff"/>
-      <ellipse cx="74" cy="${ey+16}" rx="9" ry="5.5" fill="#ff8fa3" opacity=".75"/><ellipse cx="146" cy="${ey+16}" rx="9" ry="5.5" fill="#ff8fa3" opacity=".75"/>`;
+      <ellipse cx="74" cy="${ey+16}" rx="9" ry="5.5" fill="#f39a8a" opacity=".55"/><ellipse cx="146" cy="${ey+16}" rx="9" ry="5.5" fill="#f39a8a" opacity=".55"/>`;
   const my=ey+18;
   if(o.mood==='cold') s+=`<path d="M100 ${my} q5 -5 10 0 t10 0" stroke="#2b2340" stroke-width="3.5" fill="none" stroke-linecap="round"/>`;
-  else if(o.mood==='hot') s+=`<ellipse cx="110" cy="${my+2}" rx="7" ry="8" fill="#2b2340"/><ellipse cx="110" cy="${my+6}" rx="4" ry="3" fill="#ff8fa3"/>`;
+  else if(o.mood==='hot') s+=`<ellipse cx="110" cy="${my+2}" rx="7" ry="8" fill="#2b2340"/><ellipse cx="110" cy="${my+6}" rx="4" ry="3" fill="#f39a8a"/>`;
   else s+=`<path d="M99 ${my-2} Q110 ${my+10} 121 ${my-2}" stroke="#2b2340" stroke-width="3.8" fill="none" stroke-linecap="round"/>`;
   if(o.glasses) s+=`<g fill="#2b2340"><rect x="74" y="${ey-10}" width="30" height="19" rx="9"/><rect x="116" y="${ey-10}" width="30" height="19" rx="9"/><rect x="102" y="${ey-5}" width="16" height="4" rx="2"/></g><path d="M80 ${ey-5} h8" stroke="#fff" stroke-width="3" stroke-linecap="round" opacity=".6"/>`;
-  if(o.scarf) s+=`<path d="M52 140 C80 152 140 152 168 140 L170 154 C140 166 80 166 50 154Z" fill="#7b5cff"/><rect x="126" y="150" width="18" height="30" rx="7" fill="#6847f0"/>`;
-  if(o.beanie) s+=`<path d="M58 84 C58 46 162 46 162 84Z" fill="#7b5cff"/><rect x="52" y="76" width="116" height="20" rx="10" fill="#6847f0"/><circle cx="110" cy="40" r="12" fill="#ffd23f"/>`;
-  if(o.cap) s+=`<path d="M62 86 C62 48 158 48 158 86Z" fill="#ffd23f"/><path d="M140 82 C170 76 196 82 202 92 C180 98 154 94 140 92Z" fill="#f5b400"/><circle cx="110" cy="50" r="5" fill="#f5b400"/>`;
+  if(o.scarf) s+=`<path d="M52 140 C80 152 140 152 168 140 L170 154 C140 166 80 166 50 154Z" fill="#f2884f"/><rect x="126" y="150" width="18" height="30" rx="7" fill="#d9692e"/>`;
+  if(o.beanie) s+=`<path d="M58 84 C58 46 162 46 162 84Z" fill="#45424f"/><rect x="52" y="76" width="116" height="20" rx="10" fill="#2a2733"/><circle cx="110" cy="40" r="12" fill="#f9b98f"/>`;
+  if(o.cap) s+=`<path d="M62 86 C62 48 158 48 158 86Z" fill="#45424f"/><path d="M140 82 C170 76 196 82 202 92 C180 98 154 94 140 92Z" fill="#2a2733"/>`;
   if(o.lamp){ const ly=o.beanie?86:o.cap?78:74; s+=`<circle cx="110" cy="${ly}" r="18" fill="#fff6b0" opacity=".35"/><circle cx="110" cy="${ly}" r="8" fill="#fff3a0" stroke="#3b3355" stroke-width="3"/>`; }
-  if(o.mood==='hot') s+=`<path d="M170 64 C175 74 180 79 180 85 a10 10 0 0 1 -20 0 c0 -6 5 -11 10 -21Z" fill="#7dd3fc"/>`;
-  if(o.mood==='cold') s+=`<g stroke="#8fc8ff" stroke-width="4" stroke-linecap="round"><path d="M22 92 l-8 -4"/><path d="M20 112 h-10"/><path d="M198 100 l9 -4"/></g>`;
-  if(o.mood==='happy' && !o.umbrella) s+=`<g fill="#ffd23f"><path d="M190 52 l3 8 8 3 -8 3 -3 8 -3 -8 -8 -3 8 -3Z"/><path d="M28 70 l2 5 5 2 -5 2 -2 5 -2 -5 -5 -2 5 -2Z"/></g>`;
+  if(o.mood==='hot') s+=`<path d="M170 64 C175 74 180 79 180 85 a10 10 0 0 1 -20 0 c0 -6 5 -11 10 -21Z" fill="#c9d6dc"/>`;
+  if(o.mood==='cold') s+=`<g stroke="#cfcad3" stroke-width="4" stroke-linecap="round"><path d="M22 92 l-8 -4"/><path d="M20 112 h-10"/><path d="M198 100 l9 -4"/></g>`;
+  if(o.mood==='happy' && !o.umbrella) s+=`<g fill="#f9b98f"><path d="M190 52 l3 8 8 3 -8 3 -3 8 -3 -8 -8 -3 8 -3Z"/><path d="M28 70 l2 5 5 2 -5 2 -2 5 -2 -5 -5 -2 5 -2Z"/></g>`;
   return s+'</g>';
 }
 
@@ -296,9 +296,10 @@ const SHAPE={
   light:'M12 9.8a3.2 3.2 0 1 1 0 6.4 3.2 3.2 0 0 1 0-6.4ZM11 4h2v3h-2ZM5.6 6.9l1.4-1.4 2 2-1.4 1.4ZM17 5.5l1.4 1.4-2 2L15 7.5Z',
   water:'M9.5 3h5v2.5L16 7.5V20c0 .6-.4 1-1 1H9c-.6 0-1-.4-1-1V7.5l1.5-2Z'
 };
-const TONE={ top:['#e6f4ff','#bfe2ff','#2f86d6','#5ab8ff'], outer:['#fff0e6','#ffd3b8','#e0580f','#ff7a2f'],
-  bottom:['#efedfb','#d6d0f5','#5b49c7','#7b5cff'], head:['#fff8d6','#ffe58a','#b07a00','#ffc61a'],
-  hands:['#ffeef3','#ffcadb','#d14b7a','#ff7aa8'], other:['#e8f8ef','#bfeccf','#1f9a5a','#3cc47c'] };
+const TONE={ /* [底色, 边色, 文字色, 填充色] —— 只用主色深浅和墨色 */
+  top:['#fff4ed','#fde3d2','#d9692e','#f2884f'], outer:['#fff4ed','#fde3d2','#a94b1c','#d9692e'],
+  bottom:['#f3f2f5','#e4e2e8','#2a2733','#45424f'], head:['#f3f2f5','#e4e2e8','#2a2733','#45424f'],
+  hands:['#f3f2f5','#e4e2e8','#2a2733','#45424f'], other:['#f3f2f5','#e4e2e8','#5d5a66','#8b8794'] };
 const icon=(k,tone)=>`<svg viewBox="0 0 24 24"><path d="${SHAPE[k]}" fill="${TONE[tone][3]}" stroke="${TONE[tone][2]}" stroke-width="1.3" stroke-linejoin="round" fill-rule="evenodd"/></svg>`;
 
 /* ---------- 人形穿搭图 ---------- */
@@ -306,7 +307,7 @@ function bodyFigure(d){
   const by=Object.fromEntries(d.items.map(x=>[x.part,x]));
   const top=by['上身'], outer=by['外层'], bot=by['下身'], head=by['头部'], hands=by['手'];
   const F=t=>TONE[t][3], D=t=>TONE[t][2];
-  const skin='#ffd7bf', skinDk='#f4b896';
+  const skin='#fbe1d0', skinDk='#f1c9ae';
   const torso='M70 78 Q100 70 130 78 L138 82 Q143 87 141 97 L133 192 L67 192 L59 97 Q57 87 62 82 Z';
   const armL='M64 88 L49 150 L45 198', armR='M136 88 L151 150 L155 198';
   const limb=(p,c,w)=>`<path d="${p}" stroke="${c}" stroke-width="${w}" stroke-linecap="round" stroke-linejoin="round" fill="none"/>`;
@@ -314,7 +315,7 @@ function bodyFigure(d){
   // 身体（中性人台）
   g+=limb(armL,skinDk,17)+limb(armR,skinDk,17);
   g+=limb('M87 194 L83 270 L81 326',skinDk,22)+limb('M113 194 L117 270 L119 326',skinDk,22);
-  g+=`<ellipse cx="76" cy="336" rx="15" ry="8" fill="#fff" stroke="#d9d3e6" stroke-width="2"/><ellipse cx="124" cy="336" rx="15" ry="8" fill="#fff" stroke="#d9d3e6" stroke-width="2"/>`;
+  g+=`<ellipse cx="76" cy="336" rx="15" ry="8" fill="#fff" stroke="#dcd8d4" stroke-width="2"/><ellipse cx="124" cy="336" rx="15" ry="8" fill="#fff" stroke="#dcd8d4" stroke-width="2"/>`;
   g+=`<path d="${torso}" fill="${skin}"/><rect x="92" y="62" width="16" height="16" rx="6" fill="${skinDk}"/>`;
   // 下身
   if(bot){ const c=F('bottom'), k=D('bottom');
@@ -338,7 +339,7 @@ function bodyFigure(d){
   g+=`<circle cx="45" cy="203" r="9" fill="${hc}"/><circle cx="155" cy="203" r="9" fill="${hc}"/>`;
   // 头
   g+=`<circle cx="100" cy="42" r="25" fill="${skin}"/>`;
-  g+=`<path d="M72 62 C64 20 86 11 100 11 C114 11 136 20 128 62 C124 56 124 42 119 31 C107 35 93 35 81 31 C76 42 76 56 72 62Z" fill="#5a4032"/>`;
+  g+=`<path d="M72 62 C64 20 86 11 100 11 C114 11 136 20 128 62 C124 56 124 42 119 31 C107 35 93 35 81 31 C76 42 76 56 72 62Z" fill="#3b3440"/>`;
   g+=`<circle cx="91" cy="44" r="2.8" fill="#2b2340"/><circle cx="109" cy="44" r="2.8" fill="#2b2340"/><path d="M94 53 Q100 58 106 53" stroke="#2b2340" stroke-width="2.2" fill="none" stroke-linecap="round"/>`;
   if(d.look.glasses) g+=`<g fill="#2b2340"><rect x="82" y="38" width="15" height="10" rx="5"/><rect x="103" y="38" width="15" height="10" rx="5"/><rect x="96" y="41" width="8" height="2.5"/></g>`;
   if(head){ const c=F('head'), k=D('head');
@@ -353,10 +354,10 @@ function bodyFigure(d){
   let lab='';
   slots.forEach(([part,it,[ax,ay],ly])=>{ if(!it) return;
     const tone=it.tone, fs=it.name.length>7?13:15;
-    lab+=`<path d="M${ax} ${ay} L188 ${ly}" stroke="${D(tone)}" stroke-width="1.5" opacity=".45" fill="none"/>
-      <circle cx="${ax}" cy="${ay}" r="4.5" fill="${F(tone)}" stroke="#fff" stroke-width="2"/>
-      <text x="196" y="${ly-5}" font-size="12" font-weight="700" fill="${D(tone)}">${part}</text>
-      <text x="196" y="${ly+14}" font-size="${fs}" font-weight="800" fill="#2b2340">${esc(it.name)}</text>`; });
+    lab+=`<path d="M${ax} ${ay} L188 ${ly}" stroke="#cfcad3" stroke-width="1.2" fill="none"/>
+      <circle cx="${ax}" cy="${ay}" r="4" fill="#2a2733" stroke="#fff" stroke-width="2"/>
+      <text x="196" y="${ly-5}" font-size="12" font-weight="600" fill="#8b8794">${part}</text>
+      <text x="196" y="${ly+14}" font-size="${fs}" font-weight="700" fill="#2a2733">${esc(it.name)}</text>`; });
   return `<svg viewBox="0 0 340 352" role="img" aria-label="穿搭示意：${esc(d.items.map(x=>x.part+x.name).join('，'))}">${g}${lab}</svg>`;
 }
 
@@ -569,14 +570,12 @@ function bestTime(){
 
 /* ---------- 场景 ---------- */
 function sceneFor(w,d){
-  const h=+w.time.slice(11,13);
-  if(!w.day) return {bg:'#2e2a5c',dark:true,deco:[[40,40],[300,30],[340,90],[80,110],[260,140]].map(([x,y])=>`<circle cx="${x}" cy="${y}" r="2.5" fill="#fff" opacity=".7"/>`).join('')+'<circle cx="330" cy="46" r="18" fill="#fff4c2"/><circle cx="340" cy="40" r="15" fill="#2e2a5c"/>'};
-  if(d.snowy) return {bg:'#e9f1fb',deco:Array.from({length:12},(_,i)=>`<circle cx="${(i*67)%380}" cy="${30+(i*41)%220}" r="4" fill="#fff"/>`).join('')};
-  if(d.rainy) return {bg:'#dcefff',deco:Array.from({length:14},(_,i)=>`<path d="M${(i*53)%380} ${40+(i*37)%240} l-5 12" stroke="#7cc4ff" stroke-width="4" stroke-linecap="round"/>`).join('')};
-  const cloud=(x,y,s)=>`<g transform="translate(${x} ${y}) scale(${s})" fill="#fff"><circle cx="0" cy="0" r="16"/><circle cx="20" cy="-8" r="20"/><circle cx="42" cy="2" r="14"/><rect x="-8" y="0" width="56" height="16" rx="8"/></g>`;
-  if(w.code>=2) return {bg:'#ece6ff',deco:cloud(270,60,1)+cloud(20,150,.7)};
-  if(h<=7||h>=16) return {bg:'#ffe2cf',deco:'<circle cx="320" cy="60" r="30" fill="#ffb37a"/>'+cloud(30,130,.7)};
-  return {bg:'#fff1c2',deco:'<circle cx="320" cy="56" r="28" fill="#ffd23f"/><circle cx="320" cy="56" r="42" fill="#ffd23f" opacity=".25"/>'+cloud(24,140,.7)};
+  if(!w.day) return {bg:'#2a2733',dark:true,deco:[[40,40],[300,30],[340,90],[80,110],[260,140]].map(([x,y])=>`<circle cx="${x}" cy="${y}" r="2" fill="#fff" opacity=".5"/>`).join('')+'<circle cx="335" cy="44" r="16" fill="#f3e6d8"/><circle cx="344" cy="38" r="14" fill="#2a2733"/>'};
+  const cloud=(x,y,s,c)=>`<g transform="translate(${x} ${y}) scale(${s})" fill="${c}"><circle cx="0" cy="0" r="16"/><circle cx="20" cy="-8" r="20"/><circle cx="42" cy="2" r="14"/><rect x="-8" y="0" width="56" height="16" rx="8"/></g>`;
+  if(d.snowy) return {bg:'#f6f3f0',deco:Array.from({length:10},(_,i)=>`<circle cx="${(i*67)%380}" cy="${30+(i*41)%200}" r="3.5" fill="#fff"/>`).join('')};
+  if(d.rainy) return {bg:'#f3f1ef',deco:cloud(285,34,.9,'#e7e3df')+Array.from({length:10},(_,i)=>`<path d="M${30+(i*53)%340} ${70+(i*37)%160} l-4 10" stroke="#d6d1cc" stroke-width="3" stroke-linecap="round"/>`).join('')};
+  if(w.code>=2) return {bg:'#fbf6f1',deco:cloud(285,40,.95,'#fff')+cloud(14,150,.6,'#fff')};
+  return {bg:'#fff4ed',deco:'<circle cx="330" cy="46" r="22" fill="#fde3d2"/>'};
 }
 
 /* ---------- 渲染 ---------- */
