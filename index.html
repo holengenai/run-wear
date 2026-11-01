@@ -86,6 +86,11 @@ button:focus-visible,input:focus-visible{outline:3px solid #b9a8ff;outline-offse
 .extras{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
 .extras span{display:flex;align-items:center;gap:6px;background:var(--fill);color:var(--ink);border-radius:999px;padding:5px 12px 5px 8px;font-size:14px;font-weight:700}
 .extras svg{width:20px;height:20px}
+.better{margin:10px 2px 0;font-size:13px;color:var(--muted)}
+.better b{color:var(--ink);font-weight:600}
+.stage .meta .det{border:0;font:inherit;font-size:13px;font-weight:700;cursor:pointer;color:var(--brand-text);background:rgba(255,255,255,.92);border-radius:999px;padding:3px 10px}
+.stage.dark .meta .det{color:#ffd0b0;background:rgba(255,255,255,.14)}
+.t.more{color:var(--ink)}
 /* 提醒 */
 .tips{background:var(--fill);border-radius:20px;padding:14px 16px}
 .tips h3{margin:0 0 4px;font-size:13px;font-weight:700;color:var(--muted)}
@@ -190,23 +195,11 @@ button:focus-visible,input:focus-visible{outline:3px solid #b9a8ff;outline-offse
     <h2 class="h" id="wearTitle">这样穿</h2>
     <div class="body mt" id="body"></div>
     <div class="extras" id="extras" hidden></div>
+    <p class="better" id="better" hidden></p>
   </section>
 
   <section class="tips" id="tipsSec" hidden><h3>小提醒</h3><ul id="tips"></ul></section>
 
-  <section class="rows" id="moreSec" hidden>
-    <button class="row chunky" id="moreBtn" aria-expanded="false">选其它时间 <span aria-hidden="true">›</span></button>
-    <div class="panel" id="morePanel" hidden>
-      <div class="days" id="days"></div>
-      <div class="hours" id="hours"></div>
-      <div class="note">数字是气温。色条：绿色适合跑，黄色还行，红色要谨慎。</div>
-    </div>
-    <button class="row chunky" id="detBtn" aria-expanded="false">天气详情 <span aria-hidden="true">›</span></button>
-    <div class="panel" id="detPanel" hidden>
-      <div class="grid" id="grid"></div>
-      <div class="note" id="feelNote"></div>
-    </div>
-  </section>
   <p class="foot">天气数据 <a href="https://open-meteo.com/" target="_blank" rel="noopener">Open-Meteo</a> · 几天后是预报，出门前再看一眼</p>
 
   <div class="cta" id="cta" hidden><button class="big" id="ctaBtn">跑完了，打个卡</button></div>
@@ -349,16 +342,16 @@ function bodyFigure(d){
     if(/脖套/.test(head.name)) g+=`<rect x="86" y="64" width="28" height="14" rx="6" fill="${c}"/>`;
   }
   if(d.look.lamp) g+=`<circle cx="100" cy="27" r="5" fill="#fff3a0" stroke="#2b2340" stroke-width="2"/>`;
-  // 标注
-  const slots=[['头部',head,[124,34],44],['上身',top,[132,112],108],['外层',outer,[140,158],152],['手',hands,[164,203],206],['下身',bot,[128,226],258]];
+  // 标注：人形居中（整体右移 100），左边放上身、手，右边放头部、外层、下身
+  const slots=[['头部',head,[224,34],44,'R'],['上身',top,[168,112],108,'L'],['外层',outer,[240,158],152,'R'],['手',hands,[145,203],206,'L'],['下身',bot,[228,226],258,'R']];
   let lab='';
-  slots.forEach(([part,it,[ax,ay],ly])=>{ if(!it) return;
-    const tone=it.tone, fs=it.name.length>7?13:15;
-    lab+=`<path d="M${ax} ${ay} L188 ${ly}" stroke="#cfcad3" stroke-width="1.2" fill="none"/>
+  slots.forEach(([part,it,[ax,ay],ly,side])=>{ if(!it) return;
+    const fs=it.name.length>6?13:15, L=side==='L', tx=L?120:280, lx=L?126:274, anc=L?'end':'start';
+    lab+=`<path d="M${ax} ${ay} L${lx} ${ly}" stroke="#cfcad3" stroke-width="1.2" fill="none"/>
       <circle cx="${ax}" cy="${ay}" r="4" fill="#2a2733" stroke="#fff" stroke-width="2"/>
-      <text x="196" y="${ly-5}" font-size="12" font-weight="600" fill="#8b8794">${part}</text>
-      <text x="196" y="${ly+14}" font-size="${fs}" font-weight="700" fill="#2a2733">${esc(it.name)}</text>`; });
-  return `<svg viewBox="0 0 340 352" role="img" aria-label="穿搭示意：${esc(d.items.map(x=>x.part+x.name).join('，'))}">${g}${lab}</svg>`;
+      <text x="${tx}" y="${ly-5}" text-anchor="${anc}" font-size="12" font-weight="600" fill="#6f6a78">${part}</text>
+      <text x="${tx}" y="${ly+14}" text-anchor="${anc}" font-size="${fs}" font-weight="700" fill="#2a2733">${esc(it.name)}</text>`; });
+  return `<svg viewBox="0 0 400 352" role="img" aria-label="穿搭示意：${esc(d.items.map(x=>x.part+x.name).join('，'))}"><g transform="translate(100 0)">${g}</g>${lab}</svg>`;
 }
 
 /* ---------- 弹层 ---------- */
@@ -381,8 +374,7 @@ $('#placeBtn').addEventListener('click',openPlace);
 
 const FIELDS=[
   {key:'body',lab:'跑步时你比较',opts:[[-5,'怕冷'],[0,'差不多'],[4,'怕热']]},
-  {key:'dur',lab:'一次一般跑',opts:[['short','30 分钟内'],['mid','30–60 分钟'],['long','1 小时以上']]},
-  {key:'when',lab:'平时什么时候跑',opts:[['morning','早上'],['evening','晚上'],['any','不一定']]}
+  {key:'dur',lab:'一次一般跑',opts:[['short','30 分钟内'],['mid','30–60 分钟'],['long','1 小时以上']]}
 ];
 const nearestBody=v=>[-5,0,4].reduce((a,b)=>Math.abs(b-v)<Math.abs(a-v)?b:a);
 function openSettings(){
@@ -442,7 +434,7 @@ function autoLocate(fromModal){
   navigator.geolocation.getCurrentPosition(async pos=>{
     const {latitude:lat,longitude:lon}=pos.coords; let name='当前位置';
     try{ const j=await (await fetch(`https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${lat}&longitude=${lon}&localityLanguage=zh`)).json();
-      name=j.city||j.locality||j.principalSubdivision||name; }catch(e){}
+      name=j.locality||j.city||j.principalSubdivision||name; }catch(e){}
     choosePlace({lat,lon,name});
   },fallback,{enableHighAccuracy:false,timeout:8000,maximumAge:600000});
 }
@@ -483,13 +475,27 @@ async function loadWeather(){
 }
 const idxAt=(off,h)=>{ const d=state.dates[off]; return d?state.data.hourly.time.indexOf(`${d}T${String(h).padStart(2,'0')}:00`):-1; };
 function buildTimes(){
-  const nowH=+state.nowKey.slice(11,13), when=state.profile.when, list=[{label:'现在',idx:state.nowIdx}];
-  if(when==='morning'){ if(nowH<6) list.push({label:'今早 6 点',idx:idxAt(0,6)}); list.push({label:'明早 6 点',idx:idxAt(1,6)},{label:'后天早上',idx:idxAt(2,6)}); }
-  else if(when==='evening'){ if(nowH<19) list.push({label:'今晚 7 点',idx:idxAt(0,19)}); list.push({label:'明晚 7 点',idx:idxAt(1,19)}); if(nowH>=19) list.push({label:'后天晚上',idx:idxAt(2,19)}); }
-  else { if(nowH<19) list.push({label:'今晚 7 点',idx:idxAt(0,19)}); list.push({label:'明早 7 点',idx:idxAt(1,7)},{label:'明晚 7 点',idx:idxAt(1,19)}); }
+  const nowH=+state.nowKey.slice(11,13), list=[{label:'现在',idx:state.nowIdx,ord:0}];
+  const m= nowH<7 ? {label:'今早 7 点',idx:idxAt(0,7),ord:7} : {label:'明早 7 点',idx:idxAt(1,7),ord:31};
+  const e= nowH<19 ? {label:'今晚 7 点',idx:idxAt(0,19),ord:19} : {label:'明晚 7 点',idx:idxAt(1,19),ord:43};
+  list.push(...[m,e].sort((a,b)=>a.ord-b.ord));
   const box=$('#times'); box.innerHTML='';
   list.filter(c=>c.idx>=0).forEach(c=>{ const b=document.createElement('button'); b.className='t chunky'; b.textContent=c.label; b.dataset.idx=c.idx;
     b.addEventListener('click',()=>{ state.hourIdx=c.idx; renderAll(); }); box.appendChild(b); });
+  const more=document.createElement('button'); more.className='t chunky more'; more.textContent='其它时间 ›'; more.addEventListener('click',openTimes); box.appendChild(more);
+}
+function openTimes(){
+  openModal(`<h3 id="modalTitle">选一个时间</h3><div class="days" id="days"></div><div class="hours" id="hours"></div>
+    <div class="note">数字是气温。色条：绿色适合跑，黄色还行，红色要谨慎。</div><button class="big ghost mt" id="tClose">关闭</button>`);
+  renderDays(); renderHours(); $('#tClose').addEventListener('click',closeModal);
+}
+function openDetails(){
+  const w=hourData(state.hourIdx), d=decide(w), bo=boost();
+  openModal(`<h3 id="modalTitle">天气详情</h3><div class="grid">${[['气温',`${Math.round(w.t)}°`],['体感',`${Math.round(w.at)}°`],['跑起来像',`${Math.round(d.rt)}°`],
+    ['风速',`${w.ws.toFixed(1)}<small>m/s</small>`],['降水概率',`${w.pp}<small>%</small>`],['紫外线',`${w.uv.toFixed(0)}`],['湿度',`${w.rh}<small>%</small>`],['露点',`${Math.round(w.dp)}°`],['阵风',`${w.wg.toFixed(0)}<small>m/s</small>`]]
+    .map(([a,b])=>`<div><div class="k">${a}</div><div class="n">${b}</div></div>`).join('')}</div>
+    <p class="note">跑步会发热，所以按「跑起来像」的温度来穿：体感温度 ${bo>=0?'+':'−'} ${Math.abs(bo)}°，已算上你的设置和打卡反馈。</p><button class="big ghost mt" id="dClose">关闭</button>`);
+  $('#dClose').addEventListener('click',closeModal);
 }
 
 /* ---------- 推荐逻辑 ---------- */
@@ -497,44 +503,44 @@ function hourData(k){ const H=state.data.hourly;
   return { t:H.temperature_2m[k], at:H.apparent_temperature[k], rh:H.relative_humidity_2m[k], dp:H.dew_point_2m[k],
     pp:H.precipitation_probability[k]??0, pr:H.precipitation[k]??0, code:H.weather_code[k], ws:H.wind_speed_10m[k],
     wg:H.wind_gusts_10m[k], uv:H.uv_index[k]??0, day:H.is_day[k]===1, time:H.time[k] }; }
-const boost=()=>(state.profile.dur==='long'?5:6)+(state.profile.body||0);
+const boost=()=>(state.profile.dur==='long'?8:6)+(state.profile.body||0);
 function score(k){ const w=hourData(k); let s=100;
   if(w.at<8) s-=(8-w.at)*3; if(w.at>18) s-=(w.at-18)*4; if(w.dp>18) s-=(w.dp-18)*5;
   s-=Math.max(0,w.pp-20)*0.5; if(w.pr>=1) s-=20; if(w.ws>5) s-=(w.ws-5)*4; if(w.uv>=6) s-=(w.uv-5)*3;
   if([95,96,99].includes(w.code)) s-=50; return Math.max(0,Math.min(100,s)); }
 const scoreColor=s=>s>=75?'var(--good)':s>=50?'var(--ok)':'var(--bad)';
-const TIERS=[
- {min:30,line:'跑起来会很热，能少穿就少穿',top:['背心','singlet'],bottom:['短裤','shorts'],head:'遮阳帽'},
- {min:24,line:'跑起来会热，按夏天穿就行',top:['速干短袖','tee'],bottom:['短裤','shorts'],head:'遮阳帽'},
- {min:21,line:'跑起来刚刚好，短袖短裤最舒服',top:['速干短袖','tee'],bottom:['短裤','shorts']},
- {min:15,line:'出门有点凉，跑 10 分钟就刚好',top:['速干薄长袖','long'],bottom:['短裤','shorts']},
- {min:10,line:'出门会冷，跑起来就暖了',top:['速干长袖','long'],bottom:['短裤或七分裤','shorts'],hands:'薄手套（可选）'},
- {min:5,line:'有点冷，护好手和耳朵',top:['速干长袖','long'],outer:['防风马甲','vest'],bottom:['长紧身裤','tights'],head:'护耳头带',headIcon:'band',hands:'薄手套'},
- {min:-1,line:'很冷，要分层穿',top:['保暖长袖打底','long'],outer:['防风外套','jacket'],bottom:['加绒紧身裤','tights'],head:'保暖帽',headIcon:'beanie',hands:'手套'},
- {min:-99,line:'严寒，全副武装再出门',top:['打底＋抓绒中层','long'],outer:['防风外套','jacket'],bottom:['加绒紧身裤','tights'],head:'保暖帽＋脖套',headIcon:'beanie',hands:'厚手套'}
+const TIERS=[ /* [新手衣柜里就有的, 图标, 有的话更好] */
+ {min:30,line:'天很热，能少穿就少穿',top:['背心或短袖','singlet','速干背心'],bottom:['运动短裤','shorts','跑步短裤'],head:'有帽檐的帽子'},
+ {min:24,line:'跑起来会热，按夏天穿',top:['短袖 T 恤','tee','速干 T 恤'],bottom:['运动短裤','shorts','跑步短裤'],head:'有帽檐的帽子'},
+ {min:21,line:'不冷不热，短袖短裤最舒服',top:['短袖 T 恤','tee','速干 T 恤'],bottom:['运动短裤','shorts','跑步短裤']},
+ {min:15,line:'刚出门会觉得有点凉，跑 10 分钟就暖和了',top:['薄长袖 T 恤','long','速干长袖'],bottom:['运动短裤','shorts','跑步短裤']},
+ {min:10,line:'刚出门会冷，跑起来就不冷了',top:['长袖 T 恤','long','速干长袖'],bottom:['运动长裤或短裤','shorts','跑步短裤'],hands:['薄手套（可选）','跑步手套']},
+ {min:5,line:'冷，记得护住手和耳朵',top:['长袖 T 恤','long','速干长袖'],outer:['薄外套','vest','防风马甲'],bottom:['运动长裤','tights','跑步紧身裤'],head:'能盖住耳朵的帽子',headIcon:'beanie',hands:['薄手套','跑步手套']},
+ {min:-1,line:'很冷，要穿两层',top:['保暖内衣 + 长袖','long','速干保暖打底'],outer:['厚一点的外套','jacket','防风跑步外套'],bottom:['加绒运动裤','tights','加绒紧身裤'],head:'毛线帽',headIcon:'beanie',hands:['手套','跑步手套']},
+ {min:-99,line:'非常冷，穿厚一点再出门',top:['保暖内衣 + 卫衣','long','抓绒中层'],outer:['防风外套','jacket','防风跑步外套'],bottom:['加绒运动裤','tights','加绒紧身裤'],head:'毛线帽 + 围脖',headIcon:'beanie',hands:['厚手套','跑步手套']}
 ];
 function decide(w){
   const rt=w.at+boost(), T=TIERS.find(t=>rt>=t.min);
   const rainy=w.pp>=50||w.pr>=0.3||(w.code>=51&&w.code<=82), snowy=[71,73,75,77,85,86].includes(w.code), windy=w.ws>=5||w.wg>=10;
   let outer=T.outer?[...T.outer]:null, head=T.head||'', headIcon=T.headIcon||'cap';
-  if(windy&&rt<18&&!outer) outer=['防风马甲','vest'];
-  if(rainy&&rt<24&&!snowy) outer=['防泼水外套','jacket'];
-  if(rainy&&headIcon!=='beanie'){ head=/护耳/.test(head)?'带檐帽＋护耳带':'带帽檐的帽子'; headIcon='cap'; }
-  if(head==='遮阳帽'&&!(w.day&&(w.code<=1||w.uv>=6))) head='';
-  const items=[];
-  items.push({part:'上身',name:T.top[0],icon:T.top[1],tone:'top'});
-  if(outer) items.push({part:'外层',name:outer[0],icon:outer[1],tone:'outer'});
-  items.push({part:'下身',name:T.bottom[0],icon:T.bottom[1],tone:'bottom'});
+  if(windy&&rt<18&&!outer) outer=['薄外套','vest','防风马甲'];
+  if(rainy&&rt<24&&!snowy) outer=['带帽子的薄外套','jacket','防泼水跑步外套'];
+  if(rainy&&headIcon!=='beanie'){ head='有帽檐的帽子'; headIcon='cap'; }
+  if(head==='有帽檐的帽子'&&!rainy&&!(w.day&&(w.code<=1||w.uv>=6))) head='';
+  const items=[], better=[];
+  items.push({part:'上身',name:T.top[0],icon:T.top[1],tone:'top'}); better.push(T.top[2]);
+  if(outer){ items.push({part:'外层',name:outer[0],icon:outer[1],tone:'outer'}); better.push(outer[2]); }
+  items.push({part:'下身',name:T.bottom[0],icon:T.bottom[1],tone:'bottom'}); better.push(T.bottom[2]);
   if(head) items.push({part:'头部',name:head,icon:headIcon,tone:'head'});
-  if(T.hands) items.push({part:'手',name:T.hands,icon:'gloves',tone:'hands'});
+  if(T.hands){ items.push({part:'手',name:T.hands[0],icon:'gloves',tone:'hands'}); better.push(T.hands[1]); }
   const extras=[];
-  if(w.uv>=6&&w.day) extras.push({part:'配件',name:'墨镜和防晒霜',icon:'glasses',tone:'other'});
-  if(!w.day) extras.push({part:'配件',name:'反光条或头灯',icon:'light',tone:'other'});
-  if(rt>=27||w.dp>=20) extras.push({part:'配件',name:'带上水',icon:'water',tone:'other'});
+  if(w.uv>=6&&w.day){ extras.push({part:'配件',name:'防晒霜',icon:'glasses',tone:'other'}); better.push('运动墨镜'); }
+  if(!w.day){ extras.push({part:'配件',name:'穿浅色或亮色的衣服',icon:'tee',tone:'other'}); better.push('反光条'); }
+  if(rt>=27||w.dp>=20) extras.push({part:'配件',name:'带一瓶水',icon:'water',tone:'other'});
   const mood= rt>=27?'hot': rt<10?'cold':'happy';
   const look={mood, beanie:headIcon==='beanie'&&!!head, cap:headIcon==='cap'&&!!head&&!rainy, scarf:rt<-1,
-    umbrella:rainy&&!snowy, glasses:w.uv>=6&&w.day, lamp:!w.day};
-  return {rt,rainy,snowy,windy,line:T.line,items,extras,look};
+    umbrella:rainy&&!snowy, glasses:false, lamp:false};
+  return {rt,rainy,snowy,windy,line:T.line,items,extras,better:[...new Set(better)],look};
 }
 function badReason(w){
   if([95,96,99].includes(w.code)) return '有雷暴'; if(w.at>=28||w.dp>=22) return '太闷热';
@@ -542,15 +548,17 @@ function badReason(w){
   if(w.day&&w.uv>=8) return '太阳太晒'; return '';
 }
 function tipsFor(w,d){ const t=[];
-  if([95,96,99].includes(w.code)) t.push(['warn','有雷暴，别在户外跑，换个时间或去跑步机。']);
+  if([95,96,99].includes(w.code)) t.push(['warn','有雷暴，别在户外跑，换个时间再去。']);
   if(w.at>=28||w.dp>=22) t.push(['warn','闷热：跑慢一点，头晕、发冷、不出汗就马上停下。']);
   if(w.at<=-10) t.push(['warn','太冷：跑短一点，路线别离家太远。']);
-  if(d.rainy) t.push(['','手机装进防水袋，跑完马上换干衣服。']);
+  if(!w.day) t.push(['','夜跑选有路灯、人多的路；没有人行道时，逆着车流方向跑。']);
+  if(d.rainy) t.push(['','手机装进塑料袋，跑完马上换干衣服。']);
   if(d.windy) t.push(['','风大：先逆风出发，回程顺风。']);
-  if(d.snowy) t.push(['','穿抓地力好的鞋，避开结冰的路。']);
+  if(d.snowy) t.push(['','穿鞋底防滑的鞋，避开结冰的路。']);
   if(d.rt<5) t.push(['','先在家里活动 5 分钟再出门。']);
-  if(state.profile.dur==='long'&&d.rt<21) t.push(['','跑 1 小时以上，带一件能塞进腰包的薄外套。']);
-  if(visits<=3){ if(d.rt<21) t.push(['','出门觉得有点冷才是穿对了，别多穿。']); if(d.rt<21||d.rainy) t.push(['','别穿纯棉，汗湿了会很冷。']); }
+  if(state.profile.dur==='long'&&d.rt<21) t.push(['','跑 1 小时以上：选家附近的环线，或者腰上系一件薄外套，冷了就穿。']);
+  if(d.rt<15||d.rainy||state.profile.dur==='long') t.push(['','贴身那件尽量别穿纯棉，汗湿了会冷。']);
+  if(visits<=3&&d.rt<21) t.push(['','出门觉得有点冷才是穿对了，别多穿。']);
   return t.slice(0,3); }
 
 /* ---------- 最适合跑的时间 ---------- */
@@ -581,7 +589,7 @@ function sceneFor(w,d){
 /* ---------- 渲染 ---------- */
 function renderAll(){
   const k=state.hourIdx, w=hourData(k), d=decide(w), s=score(k);
-  ['#stage','#wearSec','#moreSec','#cta'].forEach(id=>$(id).hidden=false);
+  ['#stage','#wearSec','#cta'].forEach(id=>$(id).hidden=false);
   const sc=sceneFor(w,d), st=$('#stage');
   st.style.setProperty('--sky',sc.bg); st.classList.toggle('dark',!!sc.dark);
   $('#deco').innerHTML=`<svg width="100%" height="100%" viewBox="0 0 380 360" preserveAspectRatio="xMidYMid slice">${sc.deco}</svg>`;
@@ -589,7 +597,8 @@ function renderAll(){
   const when=k===state.nowIdx?'现在':(di===0?'今天':di===1?'明天':di===2?'后天':WEEK[dt.getUTCDay()])+' '+w.time.slice(11,16);
   const cond=[w.ws<2?'几乎没风':w.ws<5?'有一点风':w.ws<8?'风比较大':'大风'];
   if(!(w.code>=51&&w.code<=99)) cond.push(w.pp<20?'不会下雨':w.pp<50?'可能下点雨':'大概率下雨');
-  $('#meta').innerHTML=`<span>${when}</span><span><b>${Math.round(w.t)}°</b> ${WMO[w.code]||''}</span>`+cond.map(c=>`<span>${c}</span>`).join('');
+  $('#meta').innerHTML=`<span>${when}</span><span><b>${Math.round(w.t)}°</b> ${WMO[w.code]||''}</span>`+cond.map(c=>`<span>${c}</span>`).join('')+'<button class="det" id="detBtn">详情 ›</button>';
+  $('#detBtn').onclick=openDetails;
   const why=badReason(w);
   $('#bubble').innerHTML=`${s<50&&why?`<span class="warn">不太适合跑步 · ${why}</span><br>`:''}${esc(d.line)}<small>跑起来的感觉像 ${Math.round(d.rt)}°</small>`;
   $('#mascot').innerHTML=mascot(d.look);
@@ -603,19 +612,13 @@ function renderAll(){
   $('#body').innerHTML=bodyFigure(d);
   const ex=$('#extras'); ex.hidden=!d.extras.length;
   ex.innerHTML=d.extras.map(x=>`<span>${icon(x.icon,'other')}${esc(x.name)}</span>`).join('');
+  const bt2=$('#better'); bt2.hidden=!d.better.length; bt2.innerHTML='有的话更好：<b>'+d.better.map(esc).join('、')+'</b>';
   const tips=tipsFor(w,d); $('#tipsSec').hidden=!tips.length;
   $('#tips').innerHTML=tips.map(([c,t])=>`<li class="${c}">${esc(t)}</li>`).join('');
   [...$('#times').children].forEach(b=>b.setAttribute('aria-pressed',+b.dataset.idx===k));
-  $('#grid').innerHTML=[['气温',`${Math.round(w.t)}°`],['体感',`${Math.round(w.at)}°`],['跑起来像',`${Math.round(d.rt)}°`],
-    ['风速',`${w.ws.toFixed(1)}<small>m/s</small>`],['降水概率',`${w.pp}<small>%</small>`],['紫外线',`${w.uv.toFixed(0)}`]]
-    .map(([a,b])=>`<div><div class="k">${a}</div><div class="n">${b}</div></div>`).join('');
-  const bo=boost(); $('#feelNote').textContent=`跑步会发热，所以按「跑起来像」的温度来穿：体感温度 ${bo>=0?'+':'−'} ${Math.abs(bo)}°，已算上你的设置和打卡反馈。`;
-  state.dayIdx=Math.max(0,di); renderDays(); renderHours(); renderStreak();
+  state.dayIdx=Math.max(0,di); renderStreak();
 }
-function toggle(btn,panel){ const open=$(panel).hidden; $(panel).hidden=!open; $(btn).setAttribute('aria-expanded',open); }
-$('#moreBtn').addEventListener('click',()=>toggle('#moreBtn','#morePanel'));
-$('#detBtn').addEventListener('click',()=>toggle('#detBtn','#detPanel'));
-function renderDays(){ const H=state.data.hourly, box=$('#days'); box.innerHTML='';
+function renderDays(){ const H=state.data.hourly, box=$('#days'); if(!box) return; box.innerHTML='';
   state.dates.forEach((d,i)=>{ const dt=new Date(d+'T12:00:00Z');
     const temps=H.time.map((t,k)=>t.startsWith(d)?H.temperature_2m[k]:null).filter(v=>v!=null);
     const b=document.createElement('button'); b.setAttribute('aria-pressed',i===state.dayIdx);
@@ -625,10 +628,10 @@ function renderDays(){ const H=state.data.hourly, box=$('#days'); box.innerHTML=
 function renderHours(){ const H=state.data.hourly, d=state.dates[state.dayIdx];
   let idxs=H.time.map((t,k)=>t.startsWith(d)?k:-1).filter(k=>k>=0);
   if(state.dayIdx===0) idxs=idxs.filter(k=>k>=state.nowIdx);
-  const box=$('#hours'); box.innerHTML='';
+  const box=$('#hours'); if(!box) return; box.innerHTML='';
   idxs.forEach(k=>{ const b=document.createElement('button'); b.className='hr'; b.setAttribute('aria-pressed',k===state.hourIdx);
     b.innerHTML=`<span class="tt">${H.time[k].slice(11,13)}时</span><span class="v">${Math.round(H.temperature_2m[k])}°</span><span class="bar" style="background:${scoreColor(score(k))}"></span>`;
-    b.addEventListener('click',()=>{ state.hourIdx=k; renderAll(); window.scrollTo({top:0,behavior:'smooth'}); });
+    b.addEventListener('click',()=>{ state.hourIdx=k; closeModal(); renderAll(); window.scrollTo({top:0,behavior:'smooth'}); });
     box.appendChild(b); }); }
 
 window.__runwear={decide,state,celebrate,openCheckin};
