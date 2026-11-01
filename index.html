@@ -55,7 +55,7 @@ button:focus-visible,input:focus-visible{outline:3px solid #b9a8ff;outline-offse
 .stage.dark .meta span{background:rgba(255,255,255,.14)}
 .stage .meta b{font-family:var(--font-latin);font-weight:700}
 .bubble{position:relative;margin:0;background:#fff;color:var(--ink);border-radius:20px;padding:13px 16px;font-size:17px;font-weight:600;line-height:1.45;box-shadow:0 6px 16px -10px rgba(43,35,64,.25);text-wrap:balance}
-.bubble::after{content:"";position:absolute;left:-9px;top:50%;margin-top:-9px;border:9px solid transparent;border-right-color:#fff;border-left:0}
+.bubble::after{content:"";position:absolute;left:50%;bottom:-9px;margin-left:-9px;border:9px solid transparent;border-top-color:#fff;border-bottom:0}
 .bubble small{display:block;font-size:13px;font-weight:700;color:var(--muted);margin-top:4px}
 .bubble .warn{display:inline-block;margin-bottom:6px;background:#fbe9e5;color:var(--danger-text);font-size:12px;font-weight:700;border-radius:8px;padding:2px 8px}
 .mascot{display:block;width:210px;height:190px;margin:4px auto 0}
@@ -65,6 +65,7 @@ button:focus-visible,input:focus-visible{outline:3px solid #b9a8ff;outline-offse
 .best{display:flex;align-items:center;justify-content:space-between;gap:8px;width:100%;margin-top:12px;border:0;border-radius:16px;background:rgba(255,255,255,.94);padding:10px 14px;font-size:14px;font-weight:700;text-align:left;color:var(--ink)}
 .best b{color:var(--brand-text)}
 .best .go{flex:0 0 auto;color:var(--brand-text);font-weight:700}
+.best[hidden]{display:none}
 .best.ok{background:rgba(255,255,255,.55);cursor:default}
 .stage.dark .best{background:rgba(255,255,255,.14);color:#fff}
 .stage.dark .best b,.stage.dark .best .go{color:#ffd0b0}
@@ -91,6 +92,17 @@ button:focus-visible,input:focus-visible{outline:3px solid #b9a8ff;outline-offse
 .stage .meta .det{border:0;font:inherit;font-size:13px;font-weight:700;cursor:pointer;color:var(--brand-text);background:rgba(255,255,255,.92);border-radius:999px;padding:3px 10px}
 .stage.dark .meta .det{color:#ffd0b0;background:rgba(255,255,255,.14)}
 .t.more{color:var(--ink)}
+.stage .bubble{margin-top:12px}
+.fig{position:relative;width:58%;max-width:250px;margin:14px auto 0}
+.fig img{display:block;width:100%;height:auto}
+.pin{position:absolute;width:22px;height:22px;margin:-11px 0 0 -11px;border-radius:50%;background:var(--ink);color:#fff;font:700 12px/22px var(--font-latin);text-align:center;box-shadow:0 0 0 2.5px #fff,0 2px 6px rgba(42,39,51,.25)}
+.stage.dark .pin{box-shadow:0 0 0 2.5px #2a2733,0 0 0 4px rgba(255,255,255,.6)}
+.legend{list-style:none;margin:10px 0 0;padding:0;display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.legend li{display:grid;grid-template-columns:22px 1fr;gap:8px;align-items:start;background:var(--fill);border-radius:16px;padding:10px 12px}
+.legend li i{width:22px;height:22px;border-radius:50%;background:var(--ink);color:#fff;font:700 12px/22px var(--font-latin);font-style:normal;text-align:center}
+.legend small{display:block;font-size:12px;color:var(--muted);line-height:1.3}
+.legend b{display:block;font-size:15px;font-weight:700;line-height:1.35}
+.feel3 img{height:96px;width:auto;max-width:100%;object-fit:contain;margin-bottom:4px}
 /* 提醒 */
 .tips{background:var(--fill);border-radius:20px;padding:14px 16px}
 .tips h3{margin:0 0 4px;font-size:13px;font-weight:700;color:var(--muted)}
@@ -184,16 +196,14 @@ button:focus-visible,input:focus-visible{outline:3px solid #b9a8ff;outline-offse
   <section class="stage" id="stage" hidden>
     <div class="deco" id="deco"></div>
     <div class="meta" id="meta"></div>
-    <div class="hero2">
-      <svg class="mascot" id="mascot" viewBox="0 0 220 200" role="img" aria-label="小团子"></svg>
-      <div class="bubble" id="bubble"></div>
-    </div>
+    <div class="bubble" id="bubble"></div>
+    <div class="fig" id="fig"></div>
     <button class="best" id="best" hidden></button>
   </section>
 
   <section id="wearSec" hidden>
     <h2 class="h" id="wearTitle">这样穿</h2>
-    <div class="body mt" id="body"></div>
+    <ol class="legend" id="legend"></ol>
     <div class="extras" id="extras" hidden></div>
     <p class="better" id="better" hidden></p>
   </section>
@@ -354,6 +364,29 @@ function bodyFigure(d){
   return `<svg viewBox="0 0 400 352" role="img" aria-label="穿搭示意：${esc(d.items.map(x=>x.part+x.name).join('，'))}"><g transform="translate(100 0)">${g}</g>${lab}</svg>`;
 }
 
+const MASCOT={"01":{"ar":0.7244,"head":[60,22],"top":[38,54.7],"outer":[66,48.4],"hands":[24.3,70.1],"bottom":[60,71.7]},"02":{"ar":0.7644,"head":[60,13.5],"top":[38,56.7],"outer":[66,51.4],"hands":[23.7,71.3],"bottom":[60,74.9]},"03":{"ar":0.85,"head":[60,22],"top":[38,51.6],"outer":[66,52.7],"hands":[23.8,67.3],"bottom":[60,69.5]},"04":{"ar":0.76,"head":[60,14.1],"top":[38,54.5],"outer":[66,53.8],"hands":[23.7,69.9],"bottom":[60,73.4]},"05":{"ar":0.8122,"head":[60,22],"top":[38,53.3],"outer":[66,54.7],"hands":[24.0,69.4],"bottom":[60,73.6]},"06":{"ar":0.7778,"head":[60,22],"top":[38,51.3],"outer":[66,51.9],"hands":[24.8,71.0],"bottom":[60,73.6]},"07":{"ar":0.8456,"head":[60,22],"top":[50,52],"outer":[27,57],"hands":[24.2,70.1],"bottom":[60,74.3]},"08":{"ar":0.7744,"head":[60,13.9],"top":[38,55.4],"outer":[66,58.4],"hands":[18.4,69.4],"bottom":[60,75.8]},"09":{"ar":0.7011,"head":[60,16.5],"top":[38,56.4],"outer":[66,59.3],"hands":[16.2,68.3],"bottom":[60,76.6]},"10":{"ar":0.7144,"head":[60,13.0],"top":[38,55.7],"outer":[66,58.5],"hands":[17.2,63.8],"bottom":[60,74.7]},"11":{"ar":0.7378,"head":[60,13.0],"top":[50,52],"outer":[27,57],"hands":[24.7,74.1],"bottom":[60,77.2]},"12":{"ar":0.7133,"head":[60,13.1],"top":[38,55.6],"outer":[66,57.5],"hands":[18.2,70.0],"bottom":[60,76.5]}};
+const IMG=k=>`img/${k}.webp`;
+function pickImage(d){
+  const m=d.tier, cap=d.capOn;
+  if(d.rainy&&d.rt<24&&!d.snowy&&!d.beanie) return d.rt<15?'12':'11';
+  if(m>=30) return cap?'02':'01';
+  if(m>=24) return cap?'04':'03';
+  if(m>=21) return '03';
+  if(m>=15) return d.hasOuter?'07':'05';
+  if(m>=10) return d.hasOuter?'07':'06';
+  if(m>=5) return '08';
+  return m>=-1?'09':'10';
+}
+const SLOT={'头部':'head','上身':'top','外层':'outer','手':'hands','下身':'bottom'};
+function drawFigure(d){
+  const key=pickImage(d), A=MASCOT[key];
+  const order=['头部','上身','外层','手','下身'];
+  const items=order.map(p=>d.items.find(x=>x.part===p)).filter(Boolean);
+  $('#fig').innerHTML=`<img src="${IMG(key)}" alt="团子穿着：${esc(items.map(x=>x.name).join('、'))}" width="${Math.round(900*A.ar)}" height="900">`+
+    items.map((x,i)=>{ const [px,py]=A[SLOT[x.part]]; return `<span class="pin" style="left:${px}%;top:${py}%">${i+1}</span>`; }).join('');
+  $('#legend').innerHTML=items.map((x,i)=>`<li><i>${i+1}</i><span><small>${x.part}</small><b>${esc(x.name)}</b></span></li>`).join('');
+}
+
 /* ---------- 弹层 ---------- */
 function openModal(html){ $('#modal').innerHTML=html; $('#overlay').hidden=false; }
 function closeModal(){ $('#overlay').hidden=true; }
@@ -396,12 +429,12 @@ function openSettings(){
 $('#setBtn').addEventListener('click',openSettings);
 
 function openCheckin(){
-  const mini=(m,extra)=>`<svg viewBox="0 0 220 200">${mascot(Object.assign({mood:m},extra))}</svg>`;
+  const mini=k=>`<img src="${IMG(k)}" alt="">`;
   openModal(`<h3 id="modalTitle" class="center">这身穿得怎么样？</h3>
     <div class="feel3">
-      <button data-d="-2">${mini('cold',{scarf:true})}偏冷</button>
-      <button data-d="0">${mini('happy',{})}刚好</button>
-      <button data-d="2">${mini('hot',{})}偏热</button>
+      <button data-d="-2">${mini('09')}偏冷</button>
+      <button data-d="0">${mini('03')}刚好</button>
+      <button data-d="2">${mini('01')}偏热</button>
     </div><p class="note center">我会记住，下次推荐自动调整</p>`);
   $('#modal').querySelectorAll('.feel3 button').forEach(b=>b.addEventListener('click',()=>{
     const d=+b.dataset.d, p=state.profile;
@@ -416,7 +449,7 @@ function celebrate(d){
     const k=x.getFullYear()+'-'+String(x.getMonth()+1).padStart(2,'0')+'-'+String(x.getDate()).padStart(2,'0');
     return `<div><i class="${set.has(k)?'on':''}">${set.has(k)?'<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5 9-10"/></svg>':''}</i>${l}</div>`; }).join('');
   openModal(`<div class="center pop">
-      <svg class="mascot" viewBox="0 0 220 200" style="width:170px;height:150px">${mascot({mood:'happy'})}</svg>
+      <img src="${IMG('03')}" alt="" style="width:120px;height:auto;display:block;margin:0 auto">
       <h3 id="modalTitle" style="margin:4px 0 8px">跑得不错！</h3>
       <div class="streakBig">连续第 ${n} 天</div>
       <div class="week">${days}</div>
@@ -540,7 +573,7 @@ function decide(w){
   const mood= rt>=27?'hot': rt<10?'cold':'happy';
   const look={mood, beanie:headIcon==='beanie'&&!!head, cap:headIcon==='cap'&&!!head&&!rainy, scarf:rt<-1,
     umbrella:rainy&&!snowy, glasses:false, lamp:false};
-  return {rt,rainy,snowy,windy,line:T.line,items,extras,better:[...new Set(better)],look};
+  return {rt,rainy,snowy,windy,line:T.line,items,extras,better:[...new Set(better)],look,tier:T.min,capOn:headIcon==='cap'&&!!head,hasOuter:!!outer,beanie:headIcon==='beanie'};
 }
 function badReason(w){
   if([95,96,99].includes(w.code)) return '有雷暴'; if(w.at>=28||w.dp>=22) return '太闷热';
@@ -601,7 +634,6 @@ function renderAll(){
   $('#detBtn').onclick=openDetails;
   const why=badReason(w);
   $('#bubble').innerHTML=`${s<50&&why?`<span class="warn">不太适合跑步 · ${why}</span><br>`:''}${esc(d.line)}<small>跑起来的感觉像 ${Math.round(d.rt)}°</small>`;
-  $('#mascot').innerHTML=mascot(d.look);
   // 只在现在不适合跑、而且之后有明显更好的时间时才提示
   const bt=bestTime(), be=$('#best'); be.hidden=true; be.onclick=null;
   if(bt && s<50 && why && bt.idx!==k && score(bt.idx)>=70){
@@ -612,7 +644,7 @@ function renderAll(){
     be.onclick=()=>{ state.hourIdx=bt.idx; renderAll(); };
   }
   $('#wearTitle').textContent=(k===state.nowIdx?'现在':when)+'这样穿';
-  $('#body').innerHTML=bodyFigure(d);
+  drawFigure(d);
   const ex=$('#extras'); ex.hidden=!d.extras.length;
   ex.innerHTML=d.extras.map(x=>`<span>${icon(x.icon,'other')}${esc(x.name)}</span>`).join('');
   const bt2=$('#better'); bt2.hidden=!d.better.length; bt2.innerHTML='有的话更好：<b>'+d.better.map(esc).join('、')+'</b>';
